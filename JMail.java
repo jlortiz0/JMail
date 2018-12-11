@@ -75,18 +75,25 @@ public class JMail {
     }
     
     public static String getResponse(String msg) {
+        return getResponse(msg, 3000);
+    }
+    public static String getResponse(String msg, int tim) {
         long time = System.currentTimeMillis();
-        sock.send(msg);
+        if (msg!=null)
+            sock.send(msg);
         try {
             while (sock.avail() == 0) {
                 Thread.sleep(500);
-                if (System.currentTimeMillis()-time > 3000) {
+                if (System.currentTimeMillis()-time > tim) {
                     crash("We could not connect to the server at \""+ip+"\"\nPlease check that you have entered the URL correctly.", "Connection error");
                 }
             }
         } catch (InterruptedException e) {
             crash("The program was interrupted.", "Operation Interrupted");
         }
-        return sock.receive();
+        msg = sock.receive();
+        if (msg.substring(0, Math.min(msg.length(), 4)).equals("QUIT"))
+            JMail.crash("Server closed connection:\n"+msg.substring(5), "Kicked from server");
+        return msg;
     }
 }

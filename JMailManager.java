@@ -37,7 +37,7 @@ public class JMailManager extends javax.swing.JFrame {
         HashMap<String,HashMap> mp;
         byte[] data = Base64.getDecoder().decode(s);
         try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data))) {
-            mp =(HashMap)ois.readObject();
+            mp =(HashMap<String,HashMap>)ois.readObject();
         } catch (Exception e) {
             JMail.crash("Could not get directory tree!", "Error");
             return null;

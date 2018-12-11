@@ -274,7 +274,7 @@ public class JMailLogin extends javax.swing.JFrame {
             "Error",
             JOptionPane.ERROR_MESSAGE);
             return;
-        } else if (JMail.getResponse("AUTH "+loginUser.getText()+" "+blake.hash(blake.hash(loginPass.getText(), loginUser.getText()), nonce)).equals("false")) {
+        } else if (JMail.getResponse("AUTH "+loginUser.getText()+" "+blake.hash(blake.hash(new String(loginPass.getPassword()), loginUser.getText()), nonce)).equals("false")) {
             JOptionPane.showMessageDialog(this,
             "Login failed!",
             "Error",
@@ -297,12 +297,12 @@ public class JMailLogin extends javax.swing.JFrame {
             "A user by that name already exists!",
             "Error",
             JOptionPane.ERROR_MESSAGE);
-        } else if (!regPass.getText().equals(regPassC.getText())) {
+        } else if (!String.valueOf(regPass.getPassword()).equals(String.valueOf(regPassC.getPassword()))) {
             JOptionPane.showMessageDialog(this,
             "The passwords do not match!",
             "Error",
             JOptionPane.ERROR_MESSAGE);
-        } else if (JMail.getResponse("REG "+regUser.getText()+" "+blake.hash(regPass.getText(), regUser.getText())).equals("false")) {
+        } else if (JMail.getResponse("REG "+regUser.getText()+" "+blake.hash(new String(regPass.getPassword()), regUser.getText())).equals("false")) {
             JOptionPane.showMessageDialog(this,
             "The registration failed...",
             "Error",
@@ -314,8 +314,7 @@ public class JMailLogin extends javax.swing.JFrame {
             JOptionPane.PLAIN_MESSAGE);
             jTabbedPane1.setSelectedIndex(0);
             loginUser.setText(regUser.getText());
-            loginPass.setText(regPass.getText());
-            
+            loginPass.setText(new String(regPass.getPassword()));
         }
         regUser.setText("");
         regPass.setText("");
