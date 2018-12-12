@@ -81,7 +81,7 @@ public class JMailManager extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree(new DefaultTreeModel(ls));
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jList1 = new javax.swing.JList<String>();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         delMsg = new javax.swing.JButton();
@@ -96,7 +96,7 @@ public class JMailManager extends javax.swing.JFrame {
         sendSubject = new javax.swing.JTextField();
         jScrollPane4 = new javax.swing.JScrollPane();
         sendBody = new javax.swing.JTextArea();
-        jButton4 = new javax.swing.JButton();
+        sendButton = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         dcB = new javax.swing.JButton();
@@ -120,11 +120,18 @@ public class JMailManager extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTree1);
 
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jList1ValueChanged(evt);
+            }
+        });
         jScrollPane2.setViewportView(jList1);
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
+        jTextArea1.setToolTipText("");
         jScrollPane3.setViewportView(jTextArea1);
 
         delMsg.setText("Delete");
@@ -207,7 +214,12 @@ public class JMailManager extends javax.swing.JFrame {
         sendBody.setRows(5);
         jScrollPane4.setViewportView(sendBody);
 
-        jButton4.setText("Send");
+        sendButton.setText("Send");
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Clear");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -237,7 +249,7 @@ public class JMailManager extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
+                .addComponent(sendButton)
                 .addGap(17, 17, 17))
         );
         jPanel2Layout.setVerticalGroup(
@@ -255,7 +267,7 @@ public class JMailManager extends javax.swing.JFrame {
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
+                    .addComponent(sendButton)
                     .addComponent(jButton5))
                 .addContainerGap())
         );
@@ -356,10 +368,6 @@ public class JMailManager extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_formWindowClosing
 
-    private void delMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delMsgActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_delMsgActionPerformed
-
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         sendBody.setText("");
         sendSubject.setText("");
@@ -431,15 +439,64 @@ public class JMailManager extends javax.swing.JFrame {
     }//GEN-LAST:event_newFoldActionPerformed
 
     private void chPsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chPsButtonActionPerformed
-        // TODO add your handling code here:
+        String cpass = JOptionPane.showInputDialog(this, "Please enter your current password:", "Password change", -1);
+        if (cpass==null || cpass.isEmpty())
+            return;
+        String npass = JOptionPane.showInputDialog(this, "Enter new password:", "Password change", -1);
+        if (npass==null || npass.isEmpty())
+            return;
+        if (!npass.equals(JOptionPane.showInputDialog(this, "Confirm new password:", "Password change", -1))) {
+            JMail.error("Passwords do not match!", "Password change error");
+            return;
+        }
+        if (JMail.getResponse("PC "+blake.hash(cpass, un)+" "+blake.hash(npass, un)).equals("true")) {
+            JOptionPane.showMessageDialog(this, "Password change sucessful!\nDon't forget to update your\npassword manager.", "Password change", 1);
+        } else {
+            JMail.error("Passchange failed!", "Password change");
+        }
     }//GEN-LAST:event_chPsButtonActionPerformed
+
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sendButtonActionPerformed
+
+    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
+        if (jTree1.getSelectionPath()==null)
+            return;
+        StringBuilder builder = new StringBuilder();
+        for(Object s: jTree1.getSelectionPath().getPath()) {
+            builder.append((String)((DefaultMutableTreeNode)s).getUserObject());
+            builder.append("\\");
+        }
+        builder.append(jList1.getSelectedValue());
+        jTextArea1.setText(JMail.getResponse("GET "+builder.delete(0, un.length()).toString()));
+    }//GEN-LAST:event_jList1ValueChanged
+
+    private void delMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delMsgActionPerformed
+        if (jTree1.getSelectionPath()==null || jList1.getSelectedIndex()==-1)
+            return;
+        StringBuilder builder = new StringBuilder();
+        for(Object s: jTree1.getSelectionPath().getPath()) {
+            builder.append((String)((DefaultMutableTreeNode)s).getUserObject());
+            builder.append("\\");
+        }
+        builder.append(jList1.getSelectedValue());
+        jTextArea1.setText("");
+        JMail.sock.send("DEL "+builder.delete(0, un.length()).toString());
+        builder = new StringBuilder();
+        for(Object s: jTree1.getSelectionPath().getPath()) {
+            builder.append((String)((DefaultMutableTreeNode)s).getUserObject());
+            builder.append("\\");
+        }
+        jList1.setListData(JMail.getResponse("GET "+builder.delete(0, un.length()).toString()).split("\n"));
+        jList1.clearSelection();
+    }//GEN-LAST:event_delMsgActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton chPsButton;
     private javax.swing.JButton dcB;
     private javax.swing.JButton delFold;
     private javax.swing.JButton delMsg;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -462,6 +519,7 @@ public class JMailManager extends javax.swing.JFrame {
     private javax.swing.JButton newFold;
     private javax.swing.JButton replMsg;
     private javax.swing.JTextArea sendBody;
+    private javax.swing.JButton sendButton;
     private javax.swing.JTextField sendSubject;
     private javax.swing.JTextField sendTo;
     // End of variables declaration//GEN-END:variables
