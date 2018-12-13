@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -457,7 +458,54 @@ public class JMailManager extends javax.swing.JFrame {
     }//GEN-LAST:event_chPsButtonActionPerformed
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
-        // TODO add your handling code here:
+        Scanner responses = new Scanner(JMail.getResponse("DATA "+sendTo.getText().replace(',',' ')+"\n"+sendSubject.getText()+"\n"+sendBody.getText()));
+        if (!responses.hasNext()) {
+            JOptionPane.showMessageDialog(this,
+            "Mail sent with no errors",
+            "Sendmail",
+            JOptionPane.PLAIN_MESSAGE);
+            return;
+        }
+        StringBuilder builder = new StringBuilder("The following errors occoured:\n\n");
+        String lastServer="";
+        while (responses.hasNextLine()) {
+            String resp = responses.nextLine();
+            if (resp.split(":")[0]!=lastServer) {
+                builder.append("On server ");
+                builder.append(resp.split(":")[0]);
+                builder.append("\n");
+            }
+            switch(resp.split(": ")[1]) {
+                case "getmail":
+                    builder.append(" - Server does not accept outside mail.\n");
+                    break;
+                case "badHost":
+                    builder.append(" - Server could not be found.\n");
+                    break;
+                case "io":
+                    builder.append(" - A network error occoured.\n");
+                    break;
+                case "write":
+                    builder.append(" - A filesystem error occoured.\n");
+                    break;
+                default:
+                    switch (resp.split(": ")[1].substring(0,5)) {
+                       case "User ":
+                            builder.append(" - ");
+                            builder.append(resp.split(": ")[1]);
+                            builder.append(" does not exist.\n");
+                            break;
+                       case "exists":
+                            builder.append(" - User ");
+                            builder.append(resp.split(": ")[1].substring(7));
+                            builder.append(" already has that email.\n");
+                       default:
+                            builder.append("Unknown error: ");
+                            builder.append(resp.split(": ")[1]);
+                    }
+            }
+        }
+        JMail.error(builder.toString(), "Sendmail");
     }//GEN-LAST:event_sendButtonActionPerformed
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
