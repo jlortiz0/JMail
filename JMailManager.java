@@ -65,6 +65,7 @@ public class JMailManager extends javax.swing.JFrame {
         this.un=un;
         this.ls=deserialize(JMail.getResponse("TREE"));
         initComponents();
+        this.setTitle("JMail: "+un+" on "+host);
         this.setLocationRelativeTo(null);
     }
 
@@ -464,6 +465,9 @@ public class JMailManager extends javax.swing.JFrame {
             "Mail sent with no errors",
             "Sendmail",
             JOptionPane.PLAIN_MESSAGE);
+            sendBody.setText("");
+            sendSubject.setText("");
+            sendTo.setText("");
             return;
         }
         StringBuilder builder = new StringBuilder("The following errors occoured:\n\n");
@@ -485,9 +489,6 @@ public class JMailManager extends javax.swing.JFrame {
                 case "io":
                     builder.append(" - A network error occoured.\n");
                     break;
-                case "write":
-                    builder.append(" - A filesystem error occoured.\n");
-                    break;
                 default:
                     switch (resp.split(": ")[1].substring(0,5)) {
                        case "User ":
@@ -499,6 +500,11 @@ public class JMailManager extends javax.swing.JFrame {
                             builder.append(" - User ");
                             builder.append(resp.split(": ")[1].substring(7));
                             builder.append(" already has that email.\n");
+                       case "write":
+                            builder.append(" - A filesystem error occoured while sending to");
+                            builder.append(resp.split(": ")[1].substring(7));
+                            builder.append(".\n");
+                            break;
                        default:
                             builder.append("Unknown error: ");
                             builder.append(resp.split(": ")[1]);
@@ -509,7 +515,7 @@ public class JMailManager extends javax.swing.JFrame {
     }//GEN-LAST:event_sendButtonActionPerformed
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        if (jTree1.getSelectionPath()==null)
+        if (jList1.getSelectedValue() == null || jList1.getSelectedValue().equals("") || jList1.getSelectedValue().equals("false"))
             return;
         StringBuilder builder = new StringBuilder();
         for(Object s: jTree1.getSelectionPath().getPath()) {
@@ -521,7 +527,7 @@ public class JMailManager extends javax.swing.JFrame {
     }//GEN-LAST:event_jList1ValueChanged
 
     private void delMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delMsgActionPerformed
-        if (jTree1.getSelectionPath()==null || jList1.getSelectedIndex()==-1)
+        if (jTree1.getSelectionPath()==null || jList1.getSelectedIndex()==-1 || jList1.getSelectedValue().equals(""))
             return;
         StringBuilder builder = new StringBuilder();
         for(Object s: jTree1.getSelectionPath().getPath()) {

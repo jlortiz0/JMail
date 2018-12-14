@@ -31,6 +31,7 @@ public class JMailConnector extends javax.swing.JFrame {
     public JMailConnector() {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setTitle("JMail");
     }
 
     /**

@@ -30,10 +30,11 @@ public class JMailLogin extends javax.swing.JFrame {
      * Creates new form JMailLogin
      */
     public JMailLogin() {
-        host = JMail.getResponse("HOST");
-        soft = JMail.getResponse("SOFT");
+        this.host = JMail.getResponse("HOST");
+        this.soft = JMail.getResponse("SOFT");
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setTitle("JMail: "+host);
     }
 
     /**
