@@ -459,6 +459,8 @@ public class JMailManager extends javax.swing.JFrame {
     }//GEN-LAST:event_chPsButtonActionPerformed
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        if (sendTo.getText().isEmpty() || sendSubject.getText().isEmpty() || sendBody.getText().isEmpty())
+            return;
         Scanner responses = new Scanner(JMail.getResponse("DATA "+sendTo.getText().replace(',',' ')+"\n"+sendSubject.getText()+"\n"+sendBody.getText()));
         if (!responses.hasNext()) {
             JOptionPane.showMessageDialog(this,
@@ -474,7 +476,11 @@ public class JMailManager extends javax.swing.JFrame {
         String lastServer="";
         while (responses.hasNextLine()) {
             String resp = responses.nextLine();
-            if (resp.split(":")[0]!=lastServer) {
+            if (resp.equals("sendmail")) {
+                builder.append("You cannot send mail from this account.");
+                break;
+            }
+            if (!resp.split(":")[0].equals(lastServer)) {
                 builder.append("On server ");
                 builder.append(resp.split(":")[0]);
                 builder.append("\n");
@@ -496,17 +502,23 @@ public class JMailManager extends javax.swing.JFrame {
                             builder.append(resp.split(": ")[1]);
                             builder.append(" does not exist.\n");
                             break;
-                       case "exists":
+                       case "exist":
                             builder.append(" - User ");
                             builder.append(resp.split(": ")[1].substring(7));
                             builder.append(" already has that email.\n");
+                            break;
                        case "write":
                             builder.append(" - A filesystem error occoured while sending to");
                             builder.append(resp.split(": ")[1].substring(7));
                             builder.append(".\n");
                             break;
+                       case "fmt  ":
+                            builder.append(" - Email ");
+                            builder.append(resp.substring(16));
+                            builder.append(" is incorrectly formatted.\n");
+                            break;
                        default:
-                            builder.append("Unknown error: ");
+                            builder.append("- Unknown error: ");
                             builder.append(resp.split(": ")[1]);
                     }
             }

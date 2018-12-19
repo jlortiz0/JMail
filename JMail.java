@@ -26,7 +26,7 @@ import javax.swing.UIManager;
 public class JMail {
     public static SocketInter sock = null;
     public static String ip;
-    
+    //TODO: Replace reply with refresh in JMailManager
     public static void main(String args[]) throws InterruptedException {
         blake.hash("");
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -75,16 +75,13 @@ public class JMail {
     }
     
     public static String getResponse(String msg) {
-        return getResponse(msg, 3000);
-    }
-    public static String getResponse(String msg, int tim) {
         long time = System.currentTimeMillis();
         if (msg!=null)
             sock.send(msg);
         try {
             while (sock.avail() == 0) {
                 Thread.sleep(500);
-                if (System.currentTimeMillis()-time > tim) {
+                if (System.currentTimeMillis()-time > 3000) {
                     crash("We could not connect to the server at \""+ip+"\"\nPlease check that you have entered the URL correctly.", "Connection error");
                 }
             }

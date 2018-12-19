@@ -313,9 +313,9 @@ public class JMailLogin extends javax.swing.JFrame {
             "Registration was sucessful.",
             "",
             JOptionPane.PLAIN_MESSAGE);
-            jTabbedPane1.setSelectedIndex(0);
             loginUser.setText(regUser.getText());
             loginPass.setText(new String(regPass.getPassword()));
+            loginButtonActionPerformed(new java.awt.event.ActionEvent(this, 1001, null));
         }
         regUser.setText("");
         regPass.setText("");
