@@ -83,12 +83,12 @@ public class JMailManager extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree(new DefaultTreeModel(ls));
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<String>();
+        jList1 = new javax.swing.JList<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         delMsg = new javax.swing.JButton();
         moveMsg = new javax.swing.JButton();
-        replMsg = new javax.swing.JButton();
+        refresh = new javax.swing.JButton();
         delFold = new javax.swing.JButton();
         newFold = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -145,7 +145,12 @@ public class JMailManager extends javax.swing.JFrame {
 
         moveMsg.setText("Move");
 
-        replMsg.setText("Reply");
+        refresh.setText("Refresh");
+        refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshActionPerformed(evt);
+            }
+        });
 
         delFold.setText("Delete");
         delFold.addActionListener(new java.awt.event.ActionListener() {
@@ -167,11 +172,11 @@ public class JMailManager extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(delFold, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -181,7 +186,7 @@ public class JMailManager extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(moveMsg)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(replMsg)))
+                        .addComponent(refresh)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(106, 106, 106))
@@ -200,7 +205,7 @@ public class JMailManager extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(delMsg)
                             .addComponent(moveMsg)
-                            .addComponent(replMsg)
+                            .addComponent(refresh)
                             .addComponent(delFold)
                             .addComponent(newFold))))
                 .addContainerGap(13, Short.MAX_VALUE))
@@ -238,21 +243,19 @@ public class JMailManager extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sendButton))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sendTo)
-                            .addComponent(sendSubject)))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sendButton)
-                .addGap(17, 17, 17))
+                            .addComponent(sendSubject)
+                            .addComponent(sendTo)))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,31 +309,25 @@ public class JMailManager extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE)
+            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(258, 258, 258)
-                        .addComponent(dcB)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGap(269, 269, 269)
+                .addComponent(dcB)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(chPsButton)
-                .addGap(239, 239, 239))
+                .addGap(248, 248, 248))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(dcB)
-                .addGap(40, 40, 40)
+                .addGap(38, 38, 38)
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel10)
@@ -338,9 +335,9 @@ public class JMailManager extends javax.swing.JFrame {
                 .addComponent(jLabel8)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(chPsButton)
-                .addGap(26, 26, 26))
+                .addGap(27, 27, 27))
         );
 
         jTabbedPane1.addTab("About/Disconnect", jPanel3);
@@ -349,7 +346,7 @@ public class JMailManager extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 615, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 632, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -451,7 +448,7 @@ public class JMailManager extends javax.swing.JFrame {
             JMail.error("Passwords do not match!", "Password change error");
             return;
         }
-        if (JMail.getResponse("PC "+blake.hash(cpass, un)+" "+blake.hash(npass, un)).equals("true")) {
+        if (JMail.getResponse("PC "+Blake.hash(cpass, un)+" "+Blake.hash(npass, un)).equals("true")) {
             JOptionPane.showMessageDialog(this, "Password change sucessful!\nDon't forget to update your\npassword manager.", "Password change", 1);
         } else {
             JMail.error("Passchange failed!", "Password change");
@@ -527,7 +524,7 @@ public class JMailManager extends javax.swing.JFrame {
     }//GEN-LAST:event_sendButtonActionPerformed
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        if (jList1.getSelectedValue() == null || jList1.getSelectedValue().equals("") || jList1.getSelectedValue().equals("false"))
+        if (jList1.getSelectedValue() == null || jList1.getSelectedValue().isEmpty() || jList1.getSelectedValue().equals("false"))
             return;
         StringBuilder builder = new StringBuilder();
         for(Object s: jTree1.getSelectionPath().getPath()) {
@@ -539,7 +536,7 @@ public class JMailManager extends javax.swing.JFrame {
     }//GEN-LAST:event_jList1ValueChanged
 
     private void delMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delMsgActionPerformed
-        if (jTree1.getSelectionPath()==null || jList1.getSelectedIndex()==-1 || jList1.getSelectedValue().equals(""))
+        if (jTree1.getSelectionPath()==null || jList1.getSelectedIndex()==-1 || jList1.getSelectedValue().isEmpty())
             return;
         StringBuilder builder = new StringBuilder();
         for(Object s: jTree1.getSelectionPath().getPath()) {
@@ -557,6 +554,12 @@ public class JMailManager extends javax.swing.JFrame {
         jList1.setListData(JMail.getResponse("GET "+builder.delete(0, un.length()).toString()).split("\n"));
         jList1.clearSelection();
     }//GEN-LAST:event_delMsgActionPerformed
+
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+        this.ls=deserialize(JMail.getResponse("TREE"));
+        jTree1.clearSelection();
+        ((DefaultTreeModel)jTree1.getModel()).setRoot(ls);
+    }//GEN-LAST:event_refreshActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton chPsButton;
@@ -583,7 +586,7 @@ public class JMailManager extends javax.swing.JFrame {
     private javax.swing.JTree jTree1;
     private javax.swing.JButton moveMsg;
     private javax.swing.JButton newFold;
-    private javax.swing.JButton replMsg;
+    private javax.swing.JButton refresh;
     private javax.swing.JTextArea sendBody;
     private javax.swing.JButton sendButton;
     private javax.swing.JTextField sendSubject;

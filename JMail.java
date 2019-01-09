@@ -28,7 +28,7 @@ public class JMail {
     public static String ip;
     //TODO: Replace reply with refresh in JMailManager
     public static void main(String args[]) throws InterruptedException {
-        blake.hash("");
+        Blake.hash("");
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 

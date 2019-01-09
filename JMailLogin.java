@@ -275,7 +275,7 @@ public class JMailLogin extends javax.swing.JFrame {
             "Error",
             JOptionPane.ERROR_MESSAGE);
             return;
-        } else if (JMail.getResponse("AUTH "+loginUser.getText()+" "+blake.hash(blake.hash(new String(loginPass.getPassword()), loginUser.getText()), nonce)).equals("false")) {
+        } else if (JMail.getResponse("AUTH "+loginUser.getText()+" "+Blake.hash(Blake.hash(new String(loginPass.getPassword()), loginUser.getText()), nonce)).equals("false")) {
             JOptionPane.showMessageDialog(this,
             "Login failed!",
             "Error",
@@ -303,7 +303,7 @@ public class JMailLogin extends javax.swing.JFrame {
             "The passwords do not match!",
             "Error",
             JOptionPane.ERROR_MESSAGE);
-        } else if (JMail.getResponse("REG "+regUser.getText()+" "+blake.hash(new String(regPass.getPassword()), regUser.getText())).equals("false")) {
+        } else if (JMail.getResponse("REG "+regUser.getText()+" "+Blake.hash(new String(regPass.getPassword()), regUser.getText())).equals("false")) {
             JOptionPane.showMessageDialog(this,
             "The registration failed...",
             "Error",

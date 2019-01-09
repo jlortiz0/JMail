@@ -22,7 +22,7 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author jlortiz
  */
-public class blake {
+public class Blake {
     public static String hash(String og, String salt) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
