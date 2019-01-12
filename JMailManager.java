@@ -132,6 +132,7 @@ public class JMailManager extends javax.swing.JFrame {
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
+        jTextArea1.setWrapStyleWord(true);
         jTextArea1.setRows(5);
         jTextArea1.setToolTipText("");
         jScrollPane3.setViewportView(jTextArea1);
@@ -556,9 +557,18 @@ public class JMailManager extends javax.swing.JFrame {
     }//GEN-LAST:event_delMsgActionPerformed
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
-        this.ls=deserialize(JMail.getResponse("TREE"));
-        jTree1.clearSelection();
-        ((DefaultTreeModel)jTree1.getModel()).setRoot(ls);
+        if (jTree1.getSelectionPath()==null) {
+            jList1.setListData(new String[]{});
+            jList1.clearSelection();
+            return;
+        }
+        StringBuilder builder = new StringBuilder();
+        for(Object s: jTree1.getSelectionPath().getPath()) {
+            builder.append((String)((DefaultMutableTreeNode)s).getUserObject());
+            builder.append("\\");
+        }
+        jList1.setListData(JMail.getResponse("GET "+builder.delete(0, un.length()).toString()).split("\n"));
+        jList1.clearSelection();
     }//GEN-LAST:event_refreshActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

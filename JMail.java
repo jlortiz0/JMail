@@ -26,7 +26,6 @@ import javax.swing.UIManager;
 public class JMail {
     public static SocketInter sock = null;
     public static String ip;
-    //TODO: Replace reply with refresh in JMailManager
     public static void main(String args[]) throws InterruptedException {
         Blake.hash("");
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
