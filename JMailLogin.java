@@ -35,6 +35,7 @@ public class JMailLogin extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setTitle("JMail: "+host);
+        loginUser.requestFocus();
     }
 
     /**
@@ -66,14 +67,18 @@ public class JMailLogin extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+        });
+
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
             }
         });
 
@@ -188,6 +193,13 @@ public class JMailLogin extends javax.swing.JFrame {
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Connected to:");
 
+        jButton3.setText("Disconnect");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -202,6 +214,10 @@ public class JMailLogin extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3)
+                .addGap(82, 82, 82))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,42 +230,12 @@ public class JMailLogin extends javax.swing.JFrame {
                 .addComponent(jLabel8)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel11)
-                .addContainerGap(80, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("About", jPanel3);
-
-        jLabel6.setText("   Are you sure?");
-
-        jButton3.setText("Disconnect");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(81, 81, 81)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(86, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jLabel6)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton3)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Disconnect", jPanel4);
+        jTabbedPane1.addTab("About/Disconnect", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -267,52 +253,57 @@ public class JMailLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        String nonce = JMail.getResponse("NONCE");
-        if (JMail.getResponse("VRFY "+loginUser.getText()).equals("false")) {
-            JOptionPane.showMessageDialog(this,
-            "There is no user by that name.",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
-            return;
-        } else if (JMail.getResponse("AUTH "+loginUser.getText()+" "+Blake.hash(Blake.hash(new String(loginPass.getPassword()), loginUser.getText()), nonce)).equals("false")) {
-            JOptionPane.showMessageDialog(this,
-            "Login failed!",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        this.setVisible(false);
-        new JMailManager(host, soft, loginUser.getText()).setVisible(true);
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        JMail.sock.send("QUIT");
+        JMail.sock.close();
         this.dispose();
-    }//GEN-LAST:event_loginButtonActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        switch (jTabbedPane1.getSelectedIndex()) {
+            case 0:
+                this.getRootPane().setDefaultButton(loginButton);
+                break;
+            case 1:
+                this.getRootPane().setDefaultButton(regButton);
+                break;
+            case 2:
+                this.getRootPane().setDefaultButton(jButton3);
+                break;
+        }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void regButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regButtonActionPerformed
         if (JMail.getResponse("REGA").equals("false")) {
             JOptionPane.showMessageDialog(this,
-            "Registration is not allowed on this server.",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
+                "Registration is not allowed on this server.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         } else if (JMail.getResponse("VRFY "+regUser.getText()).equals("true")) {
             JOptionPane.showMessageDialog(this,
-            "A user by that name already exists!",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
+                "A user by that name already exists!",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         } else if (!String.valueOf(regPass.getPassword()).equals(String.valueOf(regPassC.getPassword()))) {
             JOptionPane.showMessageDialog(this,
-            "The passwords do not match!",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
+                "The passwords do not match!",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         } else if (JMail.getResponse("REG "+regUser.getText()+" "+Blake.hash(new String(regPass.getPassword()), regUser.getText())).equals("false")) {
             JOptionPane.showMessageDialog(this,
-            "The registration failed...",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
+                "The registration failed...",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this,
-            "Registration was sucessful.",
-            "",
-            JOptionPane.PLAIN_MESSAGE);
+                "Registration was sucessful.",
+                "",
+                JOptionPane.PLAIN_MESSAGE);
             loginUser.setText(regUser.getText());
             loginPass.setText(new String(regPass.getPassword()));
             loginButtonActionPerformed(new java.awt.event.ActionEvent(this, 1001, null));
@@ -322,16 +313,25 @@ public class JMailLogin extends javax.swing.JFrame {
         regPassC.setText("");
     }//GEN-LAST:event_regButtonActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        JMail.sock.send("QUIT");
-        JMail.sock.close();
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+        String nonce = JMail.getResponse("NONCE");
+        if (JMail.getResponse("VRFY "+loginUser.getText()).equals("false")) {
+            JOptionPane.showMessageDialog(this,
+                "There is no user by that name.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        } else if (JMail.getResponse("AUTH "+loginUser.getText()+" "+Blake.hash(Blake.hash(new String(loginPass.getPassword()), loginUser.getText()), nonce)).equals("false")) {
+            JOptionPane.showMessageDialog(this,
+                "Login failed!",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        this.setVisible(false);
+        new JMailManager(host, soft, loginUser.getText()).setVisible(true);
         this.dispose();
-        System.exit(0);
-    }//GEN-LAST:event_formWindowClosing
+    }//GEN-LAST:event_loginButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton3;
@@ -342,13 +342,11 @@ public class JMailLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton loginButton;
     private javax.swing.JPasswordField loginPass;

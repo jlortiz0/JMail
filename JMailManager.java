@@ -83,7 +83,7 @@ public class JMailManager extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree(new DefaultTreeModel(ls));
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jList1 = new javax.swing.JList<String>();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         delMsg = new javax.swing.JButton();
@@ -112,6 +112,12 @@ public class JMailManager extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+        });
+
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
             }
         });
 
@@ -570,6 +576,20 @@ public class JMailManager extends javax.swing.JFrame {
         jList1.setListData(JMail.getResponse("GET "+builder.delete(0, un.length()).toString()).split("\n"));
         jList1.clearSelection();
     }//GEN-LAST:event_refreshActionPerformed
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        switch (jTabbedPane1.getSelectedIndex()) {
+            case 0:
+                this.getRootPane().setDefaultButton(null);
+                break;
+            case 1:
+                this.getRootPane().setDefaultButton(sendButton);
+                break;
+            case 2:
+                this.getRootPane().setDefaultButton(dcB);
+                break;
+        }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton chPsButton;
