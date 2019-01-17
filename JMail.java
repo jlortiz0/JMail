@@ -89,7 +89,7 @@ public class JMail {
         }
         msg = sock.receive();
         if (msg.substring(0, Math.min(msg.length(), 4)).equals("QUIT"))
-            JMail.crash("Server closed connection:\n"+msg.substring(5), "Kicked from server");
+            crash("Server closed connection:\n"+msg.substring(5), "Kicked from server");
         return msg;
     }
 }

@@ -154,7 +154,7 @@ public class JMailConnector extends javax.swing.JFrame {
     }//GEN-LAST:event_connectBActionPerformed
 
     private void cancelBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBActionPerformed
-        System.exit(0);
+        this.dispose();
     }//GEN-LAST:event_cancelBActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

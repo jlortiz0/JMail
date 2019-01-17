@@ -371,7 +371,6 @@ public class JMailManager extends javax.swing.JFrame {
         JMail.sock.send("QUIT");
         JMail.sock.close();
         this.dispose();
-        System.exit(0);
     }//GEN-LAST:event_formWindowClosing
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -406,7 +405,6 @@ public class JMailManager extends javax.swing.JFrame {
                 JMail.sock.send("DEL ..");
                 JMail.sock.close();
                 this.dispose();
-                System.exit(0);
             }
         } else {
             if (JOptionPane.showConfirmDialog(this,

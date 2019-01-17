@@ -257,7 +257,6 @@ public class JMailLogin extends javax.swing.JFrame {
         JMail.sock.send("QUIT");
         JMail.sock.close();
         this.dispose();
-        System.exit(0);
     }//GEN-LAST:event_formWindowClosing
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
@@ -279,6 +278,8 @@ public class JMailLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void regButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regButtonActionPerformed
+        if (regUser.getText().isEmpty() || regPass.getPassword().length == 0 || regPassC.getPassword().length == 0)
+            return;
         if (JMail.getResponse("REGA").equals("false")) {
             JOptionPane.showMessageDialog(this,
                 "Registration is not allowed on this server.",
@@ -314,6 +315,8 @@ public class JMailLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_regButtonActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+        if (loginUser.getText().isEmpty() || loginPass.getPassword().length == 0)
+            return;
         String nonce = JMail.getResponse("NONCE");
         if (JMail.getResponse("VRFY "+loginUser.getText()).equals("false")) {
             JOptionPane.showMessageDialog(this,
@@ -328,8 +331,8 @@ public class JMailLogin extends javax.swing.JFrame {
                 JOptionPane.ERROR_MESSAGE);
             return;
         }
-        this.setVisible(false);
         new JMailManager(host, soft, loginUser.getText()).setVisible(true);
+        this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_loginButtonActionPerformed
 
