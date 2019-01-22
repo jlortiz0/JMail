@@ -81,7 +81,7 @@ public class JMail {
             while (sock.avail() == 0) {
                 Thread.sleep(500);
                 if (System.currentTimeMillis()-time > 3000) {
-                    crash("We could not connect to the server at \""+ip+"\"\nPlease check that you have entered the URL correctly.", "Connection error");
+                    crash("We lost connection to the server at \""+ip+"\"\nPlease check your internet connection.", "Connection error");
                 }
             }
         } catch (InterruptedException e) {

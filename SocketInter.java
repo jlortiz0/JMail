@@ -51,7 +51,7 @@ public class SocketInter
         } catch (IOException e) {
             JMail.crash("There was an error receiving data:\n"+e, "Communication error");
         }
-        return "QUIT This message shoul never appear.\nIf it does, System.exit() has failed and your computer is screwed.";
+        return "QUIT This message should never appear.\nIf it does, System.exit() has failed and your computer is screwed.";
     }
     public void flush() {
         try {

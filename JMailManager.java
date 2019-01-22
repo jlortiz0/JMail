@@ -151,6 +151,11 @@ public class JMailManager extends javax.swing.JFrame {
         });
 
         moveMsg.setText("Move");
+        moveMsg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moveMsgActionPerformed(evt);
+            }
+        });
 
         refresh.setText("Refresh");
         refresh.addActionListener(new java.awt.event.ActionListener() {
@@ -588,6 +593,24 @@ public class JMailManager extends javax.swing.JFrame {
                 break;
         }
     }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void moveMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveMsgActionPerformed
+        if (jTree1.getSelectionPath()==null || jList1.getSelectedIndex()==-1 || jList1.getSelectedValue().isEmpty())
+            return;
+        String file = JOptionPane.showInputDialog(this, "Enter path of folder to move to:", "Move message", JOptionPane.PLAIN_MESSAGE);
+        if (file.isEmpty())
+            return;
+        StringBuilder builder = new StringBuilder();
+        for(Object s: jTree1.getSelectionPath().getPath()) {
+            builder.append((String)((DefaultMutableTreeNode)s).getUserObject());
+            builder.append("\\");
+        }
+        builder.delete(0, un.length());
+        builder.append(jList1.getSelectedValue());
+        JMail.sock.send("MV "+builder.toString()+"\n"+file+"\\"+jList1.getSelectedValue());
+        jList1.setListData(JMail.getResponse("GET "+builder.delete(builder.length()-jList1.getSelectedValue().length(), builder.length()).toString()).split("\n"));
+        jList1.clearSelection();
+    }//GEN-LAST:event_moveMsgActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton chPsButton;
