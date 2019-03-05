@@ -1,6 +1,3 @@
-import java.awt.event.WindowEvent;
-import javax.swing.JOptionPane;
-
 /*
  * Copyright (C) 2018 jlortiz
  *
@@ -18,6 +15,8 @@ import javax.swing.JOptionPane;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import java.awt.event.WindowEvent;
+import javax.swing.JOptionPane;
 /**
  *
  * @author jlortiz
